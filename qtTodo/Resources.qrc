@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/img">
+        <file>check-mark-box-icon.png</file>
+        <file>close-icon.png</file>
+        <file>copy-icon.png</file>
+        <file>cut-scissor-icon.png</file>
+        <file>file-black-icon.png</file>
+        <file>folder-icon.png</file>
+        <file>paste-icon.png</file>
+    </qresource>
+</RCC>
