@@ -53,9 +53,11 @@ OBJECTS_DIR   = ./
 ####### Files
 
 SOURCES       = ../qtTodo/main.cpp \
-		../qtTodo/mainwindow.cpp moc_mainwindow.cpp
+		../qtTodo/mainwindow.cpp qrc_Resources.cpp \
+		moc_mainwindow.cpp
 OBJECTS       = main.o \
 		mainwindow.o \
+		qrc_Resources.o \
 		moc_mainwindow.o
 DIST          = ../../../Qt/6.7.0/gcc_64/mkspecs/features/spec_pre.prf \
 		../../../Qt/6.7.0/gcc_64/mkspecs/common/unix.conf \
@@ -377,6 +379,7 @@ DIST          = ../../../Qt/6.7.0/gcc_64/mkspecs/features/spec_pre.prf \
 		../../../Qt/6.7.0/gcc_64/mkspecs/features/qt_config.prf \
 		../../../Qt/6.7.0/gcc_64/mkspecs/linux-g++/qmake.conf \
 		../../../Qt/6.7.0/gcc_64/mkspecs/features/spec_post.prf \
+		../qtTodo/.qmake.stash \
 		../../../Qt/6.7.0/gcc_64/mkspecs/features/exclusive_builds.prf \
 		../../../Qt/6.7.0/gcc_64/mkspecs/features/toolchain.prf \
 		../../../Qt/6.7.0/gcc_64/mkspecs/features/default_pre.prf \
@@ -731,6 +734,7 @@ Makefile: ../qtTodo/qtTodo.pro ../../../Qt/6.7.0/gcc_64/mkspecs/linux-g++/qmake.
 		../../../Qt/6.7.0/gcc_64/mkspecs/features/qt_config.prf \
 		../../../Qt/6.7.0/gcc_64/mkspecs/linux-g++/qmake.conf \
 		../../../Qt/6.7.0/gcc_64/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		../../../Qt/6.7.0/gcc_64/mkspecs/features/exclusive_builds.prf \
 		../../../Qt/6.7.0/gcc_64/mkspecs/features/toolchain.prf \
 		../../../Qt/6.7.0/gcc_64/mkspecs/features/default_pre.prf \
@@ -753,6 +757,7 @@ Makefile: ../qtTodo/qtTodo.pro ../../../Qt/6.7.0/gcc_64/mkspecs/linux-g++/qmake.
 		../../../Qt/6.7.0/gcc_64/mkspecs/features/yacc.prf \
 		../../../Qt/6.7.0/gcc_64/mkspecs/features/lex.prf \
 		../qtTodo/qtTodo.pro \
+		../qtTodo/Resources.qrc \
 		../../../Qt/6.7.0/gcc_64/lib/libQt6Widgets.prl \
 		../../../Qt/6.7.0/gcc_64/lib/libQt6Gui.prl \
 		../../../Qt/6.7.0/gcc_64/lib/libQt6Core.prl
@@ -1077,6 +1082,7 @@ Makefile: ../qtTodo/qtTodo.pro ../../../Qt/6.7.0/gcc_64/mkspecs/linux-g++/qmake.
 ../../../Qt/6.7.0/gcc_64/mkspecs/features/qt_config.prf:
 ../../../Qt/6.7.0/gcc_64/mkspecs/linux-g++/qmake.conf:
 ../../../Qt/6.7.0/gcc_64/mkspecs/features/spec_post.prf:
+.qmake.stash:
 ../../../Qt/6.7.0/gcc_64/mkspecs/features/exclusive_builds.prf:
 ../../../Qt/6.7.0/gcc_64/mkspecs/features/toolchain.prf:
 ../../../Qt/6.7.0/gcc_64/mkspecs/features/default_pre.prf:
@@ -1099,6 +1105,7 @@ Makefile: ../qtTodo/qtTodo.pro ../../../Qt/6.7.0/gcc_64/mkspecs/linux-g++/qmake.
 ../../../Qt/6.7.0/gcc_64/mkspecs/features/yacc.prf:
 ../../../Qt/6.7.0/gcc_64/mkspecs/features/lex.prf:
 ../qtTodo/qtTodo.pro:
+../qtTodo/Resources.qrc:
 ../../../Qt/6.7.0/gcc_64/lib/libQt6Widgets.prl:
 ../../../Qt/6.7.0/gcc_64/lib/libQt6Gui.prl:
 ../../../Qt/6.7.0/gcc_64/lib/libQt6Core.prl:
@@ -1116,6 +1123,7 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
+	$(COPY_FILE) --parents ../qtTodo/Resources.qrc $(DISTDIR)/
 	$(COPY_FILE) --parents ../../../Qt/6.7.0/gcc_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../qtTodo/mainwindow.h $(DISTDIR)/
 	$(COPY_FILE) --parents ../qtTodo/main.cpp ../qtTodo/mainwindow.cpp $(DISTDIR)/
@@ -1143,8 +1151,20 @@ check: first
 
 benchmark: first
 
-compiler_rcc_make_all:
+compiler_rcc_make_all: qrc_Resources.cpp
 compiler_rcc_clean:
+	-$(DEL_FILE) qrc_Resources.cpp
+qrc_Resources.cpp: ../qtTodo/Resources.qrc \
+		../../../Qt/6.7.0/gcc_64/libexec/rcc \
+		../qtTodo/check-mark-box-icon.png \
+		../qtTodo/folder-icon.png \
+		../qtTodo/close-icon.png \
+		../qtTodo/copy-icon.png \
+		../qtTodo/paste-icon.png \
+		../qtTodo/cut-scissor-icon.png \
+		../qtTodo/file-black-icon.png
+	/home/kaveh/Qt/6.7.0/gcc_64/libexec/rcc -name Resources ../qtTodo/Resources.qrc -o qrc_Resources.cpp
+
 compiler_moc_predefs_make_all: moc_predefs.h
 compiler_moc_predefs_clean:
 	-$(DEL_FILE) moc_predefs.h
@@ -1342,6 +1362,21 @@ moc_mainwindow.cpp: ../qtTodo/mainwindow.h \
 		../../../Qt/6.7.0/gcc_64/include/QtCore/qlocale.h \
 		../../../Qt/6.7.0/gcc_64/include/QtGui/qguiapplication_platform.h \
 		../../../Qt/6.7.0/gcc_64/include/QtWidgets/qtabwidget.h \
+		../../../Qt/6.7.0/gcc_64/include/QtWidgets/QFileDialog \
+		../../../Qt/6.7.0/gcc_64/include/QtWidgets/qfiledialog.h \
+		../../../Qt/6.7.0/gcc_64/include/QtCore/qdir.h \
+		../../../Qt/6.7.0/gcc_64/include/QtCore/qfile.h \
+		../../../Qt/6.7.0/gcc_64/include/QtCore/qfiledevice.h \
+		../../../Qt/6.7.0/gcc_64/include/QtCore/qfileinfo.h \
+		../../../Qt/6.7.0/gcc_64/include/QtCore/qdatetime.h \
+		../../../Qt/6.7.0/gcc_64/include/QtCore/qcalendar.h \
+		../../../Qt/6.7.0/gcc_64/include/QtCore/qtimezone.h \
+		../../../Qt/6.7.0/gcc_64/include/QtWidgets/qdialog.h \
+		../../../Qt/6.7.0/gcc_64/include/QtCore/QFile \
+		../../../Qt/6.7.0/gcc_64/include/QtCore/QTextStream \
+		../../../Qt/6.7.0/gcc_64/include/QtWidgets/QMessageBox \
+		../../../Qt/6.7.0/gcc_64/include/QtWidgets/qmessagebox.h \
+		../../../Qt/6.7.0/gcc_64/include/QtWidgets/qdialogbuttonbox.h \
 		moc_predefs.h \
 		../../../Qt/6.7.0/gcc_64/libexec/moc
 	/home/kaveh/Qt/6.7.0/gcc_64/libexec/moc $(DEFINES) --include /home/kaveh/qt/qtTodo/build-qtTodo-Desktop_Qt_6_7_0-Debug/moc_predefs.h -I/home/kaveh/Qt/6.7.0/gcc_64/mkspecs/linux-g++ -I/home/kaveh/qt/qtTodo/qtTodo -I/home/kaveh/Qt/6.7.0/gcc_64/include -I/home/kaveh/Qt/6.7.0/gcc_64/include/QtWidgets -I/home/kaveh/Qt/6.7.0/gcc_64/include/QtGui -I/home/kaveh/Qt/6.7.0/gcc_64/include/QtCore -I. -I/usr/include/c++/11 -I/usr/include/x86_64-linux-gnu/c++/11 -I/usr/include/c++/11/backward -I/usr/lib/gcc/x86_64-linux-gnu/11/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../qtTodo/mainwindow.h -o moc_mainwindow.cpp
@@ -1363,7 +1398,7 @@ compiler_yacc_impl_make_all:
 compiler_yacc_impl_clean:
 compiler_lex_make_all:
 compiler_lex_clean:
-compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean compiler_uic_clean 
+compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_header_clean compiler_uic_clean 
 
 ####### Compile
 
@@ -1555,6 +1590,21 @@ main.o: ../qtTodo/main.cpp ../qtTodo/mainwindow.h \
 		../../../Qt/6.7.0/gcc_64/include/QtCore/qlocale.h \
 		../../../Qt/6.7.0/gcc_64/include/QtGui/qguiapplication_platform.h \
 		../../../Qt/6.7.0/gcc_64/include/QtWidgets/qtabwidget.h \
+		../../../Qt/6.7.0/gcc_64/include/QtWidgets/QFileDialog \
+		../../../Qt/6.7.0/gcc_64/include/QtWidgets/qfiledialog.h \
+		../../../Qt/6.7.0/gcc_64/include/QtCore/qdir.h \
+		../../../Qt/6.7.0/gcc_64/include/QtCore/qfile.h \
+		../../../Qt/6.7.0/gcc_64/include/QtCore/qfiledevice.h \
+		../../../Qt/6.7.0/gcc_64/include/QtCore/qfileinfo.h \
+		../../../Qt/6.7.0/gcc_64/include/QtCore/qdatetime.h \
+		../../../Qt/6.7.0/gcc_64/include/QtCore/qcalendar.h \
+		../../../Qt/6.7.0/gcc_64/include/QtCore/qtimezone.h \
+		../../../Qt/6.7.0/gcc_64/include/QtWidgets/qdialog.h \
+		../../../Qt/6.7.0/gcc_64/include/QtCore/QFile \
+		../../../Qt/6.7.0/gcc_64/include/QtCore/QTextStream \
+		../../../Qt/6.7.0/gcc_64/include/QtWidgets/QMessageBox \
+		../../../Qt/6.7.0/gcc_64/include/QtWidgets/qmessagebox.h \
+		../../../Qt/6.7.0/gcc_64/include/QtWidgets/qdialogbuttonbox.h \
 		../../../Qt/6.7.0/gcc_64/include/QtWidgets/QApplication \
 		../../../Qt/6.7.0/gcc_64/include/QtWidgets/qapplication.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../qtTodo/main.cpp
@@ -1747,8 +1797,35 @@ mainwindow.o: ../qtTodo/mainwindow.cpp ../qtTodo/mainwindow.h \
 		../../../Qt/6.7.0/gcc_64/include/QtCore/qlocale.h \
 		../../../Qt/6.7.0/gcc_64/include/QtGui/qguiapplication_platform.h \
 		../../../Qt/6.7.0/gcc_64/include/QtWidgets/qtabwidget.h \
-		ui_mainwindow.h
+		../../../Qt/6.7.0/gcc_64/include/QtWidgets/QFileDialog \
+		../../../Qt/6.7.0/gcc_64/include/QtWidgets/qfiledialog.h \
+		../../../Qt/6.7.0/gcc_64/include/QtCore/qdir.h \
+		../../../Qt/6.7.0/gcc_64/include/QtCore/qfile.h \
+		../../../Qt/6.7.0/gcc_64/include/QtCore/qfiledevice.h \
+		../../../Qt/6.7.0/gcc_64/include/QtCore/qfileinfo.h \
+		../../../Qt/6.7.0/gcc_64/include/QtCore/qdatetime.h \
+		../../../Qt/6.7.0/gcc_64/include/QtCore/qcalendar.h \
+		../../../Qt/6.7.0/gcc_64/include/QtCore/qtimezone.h \
+		../../../Qt/6.7.0/gcc_64/include/QtWidgets/qdialog.h \
+		../../../Qt/6.7.0/gcc_64/include/QtCore/QFile \
+		../../../Qt/6.7.0/gcc_64/include/QtCore/QTextStream \
+		../../../Qt/6.7.0/gcc_64/include/QtWidgets/QMessageBox \
+		../../../Qt/6.7.0/gcc_64/include/QtWidgets/qmessagebox.h \
+		../../../Qt/6.7.0/gcc_64/include/QtWidgets/qdialogbuttonbox.h \
+		ui_mainwindow.h \
+		../../../Qt/6.7.0/gcc_64/include/QtCore/QVariant \
+		../../../Qt/6.7.0/gcc_64/include/QtWidgets/QApplication \
+		../../../Qt/6.7.0/gcc_64/include/QtWidgets/qapplication.h \
+		../../../Qt/6.7.0/gcc_64/include/QtWidgets/QMenuBar \
+		../../../Qt/6.7.0/gcc_64/include/QtWidgets/qmenubar.h \
+		../../../Qt/6.7.0/gcc_64/include/QtWidgets/qmenu.h \
+		../../../Qt/6.7.0/gcc_64/include/QtWidgets/QStatusBar \
+		../../../Qt/6.7.0/gcc_64/include/QtWidgets/qstatusbar.h \
+		../../../Qt/6.7.0/gcc_64/include/QtWidgets/QWidget
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../qtTodo/mainwindow.cpp
+
+qrc_Resources.o: qrc_Resources.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrc_Resources.o qrc_Resources.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp

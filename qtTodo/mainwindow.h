@@ -6,6 +6,7 @@
 #include <QFile>
 #include <QTextStream>
 #include <QMessageBox>
+#include <QStandardPaths>
 
 
 QT_BEGIN_NAMESPACE
@@ -22,7 +23,19 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+private slots:
+
+
+    void on_btnAdd_clicked();
+
+    void on_btnRemove_clicked();
+
+    void on_btnRemoveAll_clicked();
+
 private:
     Ui::MainWindow *ui;
+
+    QString path = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "\\toDoFile.txt";
+
 };
 #endif // MAINWINDOW_H
